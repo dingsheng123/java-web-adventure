@@ -1,13 +1,12 @@
 package com.smart4j.chapter2.service;
 
 import com.smart4j.chapter2.model.Customer;
-import com.smart4j.chapter2.util.PropsUtil;
+import com.smart4j.chapter2.util.DatabaseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author dingsheng
@@ -17,33 +16,15 @@ public class CustomerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerService.class);
 
-    private static final String DRIVER;
-    private static final String URL;
-    private static final String USERNAME;
-    private static final String PASSWORD;
-
-    static {
-        Properties properties = PropsUtil.loadProps("config.properties");
-        DRIVER = properties.getProperty("jdbc.driver");
-        URL = properties.getProperty("jdbc.url");
-        USERNAME = properties.getProperty("jdbc.username");
-        PASSWORD = properties.getProperty("jdbc.password");
-
-        try {
-            Class.forName(DRIVER);
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("can not load jdbc driver", e);
-        }
-
-    }
-
     /**
      * 获取客户列表
      * @param
      * @return
      */
     public List<Customer> getCustomerList() {
-        return null;
+        String sql = "select * from customer";
+        List<Customer> customerList = DatabaseUtil.queryEntityList(Customer.class, sql);
+        return customerList;
     }
 
     /**
@@ -52,7 +33,8 @@ public class CustomerService {
      * @return
      */
     public Customer getCustomer(Long id) {
-        return null;
+        String sql = "select * from customer where id=?";
+        return DatabaseUtil.queryEntity(Customer.class, sql, id);
     }
 
     /**
@@ -61,7 +43,7 @@ public class CustomerService {
      * @return
      */
     public boolean createCustomer(Map<String, Object> fieldMap) {
-        return false;
+        return DatabaseUtil.insertEntity(Customer.class, fieldMap);
     }
 
     /**
@@ -71,7 +53,7 @@ public class CustomerService {
      * @return
      */
     public boolean updateCustomer(Long id, Map<String, Object> fieldMap) {
-        return false;
+        return DatabaseUtil.updateEntity(Customer.class, id, fieldMap);
     }
 
     /**
@@ -80,7 +62,7 @@ public class CustomerService {
      * @return
      */
     public boolean deleteCustomer(Long id) {
-        return false;
+        return DatabaseUtil.deleteEntity(Customer.class, id);
     }
 
 }
